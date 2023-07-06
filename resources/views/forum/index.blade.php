@@ -3,96 +3,51 @@
 {{-- 내용 --}}
 @section('content')
     <div class="container">
-        <div class="d-flex gap-2 justify-content-end mt-2">
-            <button class="btn btn-primary" type="button">
-                <a href="{{ url('/create') }}">새로운포스팅</a>
-            </button>
-        </div>
-        <div class="row mt-5">
-            <div class="col-12">
-                <h4>Music</h4>
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <a href="{{ url('/1/view') }}">범죄도시</a>
-                        <span class="badge rounded-pill text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
-                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i>3</span>
-                        <br><small>2023-07-04 | by 홍길동</small>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ url('/2/view') }}">A second item</a>
-                        <span class="badge rounded-pill text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
-                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i>3</span>
-                        <br><small>2023-07-04 | by 홍길동</small>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ url('/3/view') }}">A second item</a>
-                        <span class="badge rounded-pill text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
-                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i>3</span>
-                        <br><small>2023-07-04 | by 홍길동</small>
-                    </li>
-                </ul>
+        @auth
+            <div class="d-flex justify-content-end mt-3">
+                <a href="{{ url('/create') }}">
+                    <button class="btn btn-primary" type="button">새로운포스팅</button>
+                </a>
             </div>
-            <div class="d-flex justify-content-center mt-3">
-                <button class="btn btn-dark w-50" type="button">All Posting of Movie Category</button>
-            </div>
-        </div>
+        @endauth
         <hr>
-        <div class="row mt-5">
-            <div class="col-12">
-                <h4>Movie</h4>
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <a href="{{ url('/') }}">A second item</a>
-                        <span class="badge rounded-pill text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
-                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i>3</span>
-                        <br><small>2023-07-04 | by 홍길동</small>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ url('/') }}">A second item</a>
-                        <span class="badge rounded-pill text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
-                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i>3</span>
-                        <br><small>2023-07-04 | by 홍길동</small>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ url('/') }}">A second item</a>
-                        <span class="badge rounded-pill text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
-                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i>3</span>
-                        <br><small>2023-07-04 | by 홍길동</small>
-                    </li>
-                </ul>
-            </div>
-            <div class="d-flex justify-content-center mt-3">
-                <button class="btn btn-dark w-50" type="button">All Posting of Movie Category</button>
-            </div>
-        </div>
+        @php
+            $categories = App\Models\Category::orderby('title', 'asc')->get();
+        @endphp
+        @if (count($categories) > 0)
+            @foreach ($categories as $category)
+                @php
+                    $posts = App\Models\Post::where('category_id', $category->id)
+                        ->orderby('created_at', 'desc')
+                        ->limit(3)
+                        ->get();
+                @endphp
+                @if (count($posts) > 0)
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <h4>{{ $category->title }}</h4>
+                            <ul class="list-group">
+                                @foreach ($posts as $post)
+                                    <li class="list-group-item">
+                                        <a href="{{ url('/') }}/{{ $post->id }}/view">{{ $post->title }}</a>
+                                        <span class="badge text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
+                                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i></span>
+                                        <br> <small>{{ $post->create_at }} | by 홍길동</small>
+                                    </li>
+                                @endforeach
+
+                            </ul>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <a href="{{ url('/') }}/{{ $category->id }}/category" class="btn btn-dark w-50">All Posting
+                                of
+                                {{ $category->title }}
+                                Category</a>
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        @endif
         <hr>
-        <div class="row mt-5">
-            <div class="col-12">
-                <h4>Food</h4>
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <a href="{{ url('/') }}">A second item</a>
-                        <span class="badge rounded-pill text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
-                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i>3</span>
-                        <br><small>2023-07-04 | by 홍길동</small>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ url('/') }}">A second item</a>
-                        <span class="badge rounded-pill text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
-                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i>3</span>
-                        <br><small>2023-07-04 | by 홍길동</small>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="{{ url('/') }}">A second item</a>
-                        <span class="badge rounded-pill text-bg-info"><i class="fas fa-comment-dots"></i>3</span>
-                        <span class="badge rounded-pill text-bg-danger"><i class="fas fa-heart"></i>3</span>
-                        <br><small>2023-07-04 | by 홍길동</small>
-                    </li>
-                </ul>
-            </div>
-            <div class="d-flex justify-content-center mt-3">
-                <button class="btn btn-dark w-50" type="button">All Posting of Movie Category</button>
-            </div>
-        </div>
     </div>
 @endsection

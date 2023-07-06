@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ForumController;
-use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,23 +19,16 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
-
-// require __DIR__ . '/auth.php';
-
 Route::get('/', [ForumController::class, 'index']);
-Route::get('/1/view', [ForumController::class, 'view']);
+Route::get('/{id}/view', [ForumController::class, 'view']);
+Route::get('/{id}/edit', [ForumController::class, 'edit']);
 Route::get('/create', [ForumController::class, 'create']);
 Route::post('/store', [ForumController::class, 'store']);
+Route::post('/update', [ForumController::class, 'update']);
+Route::get('/{id}/category', [ForumController::class, 'category']);
+Route::delete('/{id}/delete', [ForumController::class, 'delete']);
+Route::post('/reply/store', [ForumController::class, 'replyStore']);
+
 
 Route::get('/category', [CategoryController::class, 'index']);
 Route::get('/category/{id}/view', [CategoryController::class, 'view']);
